@@ -57,6 +57,15 @@ Or run the slash command:
 
 ## Run the scanners directly (no Claude required)
 
+One command runs the whole chain:
+
+```bash
+python3 skills/security-stack-audit/scripts/run_audit.py . --min-severity high
+# outputs land in ./.security-audit/ (profile, inventory, findings, report.md, plan.json)
+```
+
+Or run each stage yourself:
+
 ```bash
 S=skills/security-stack-audit/scripts
 mkdir -p .security-audit

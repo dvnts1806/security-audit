@@ -1,6 +1,6 @@
 {
   "name": "security-stack-audit",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Audit a project's software stack against published security advisories (OSV / GitHub Advisory DB / CVE), weigh findings against the code's real architecture and exposure, and produce a prioritized, approval-gated patch plan. Ships a skill and a security-auditor agent.",
   "author": {
     "name": "Devantas"
