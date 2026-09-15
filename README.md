@@ -19,13 +19,37 @@ It ships two things:
 
 ## Why it's different from `npm audit` / a raw scanner
 
+Every scanner checks *something* against published advisories — `npm audit`, for
+instance, does query a live database on each run. The differences are in **how many
+sources it researches, how many ecosystems it covers, and what it does with the
+results**:
+
+- **Researches every published source, across your whole stack.** On each run it
+  queries [OSV.dev](https://osv.dev) live — which federates the **GitHub Advisory
+  Database**, the **CVE** feeds, and language-specific databases (PySec, RustSec,
+  the Go vuln DB, and more) — with optional **NVD** CVSS enrichment. One audit
+  covers npm, PyPI, Go, Rust, Ruby, and PHP together. By contrast `npm audit`
+  researches only GitHub's advisories and only your **JavaScript** packages
+  (`pip-audit` only Python, `cargo audit` only Rust, and so on) — so a polyglot
+  repo needs several tools, each with a partial view.
 - **Resolved versions, not ranges.** It reads lockfiles, so matches are real.
 - **Context-ranked.** It profiles your architecture first (entry points, web
   exposure, ports, dangerous code touchpoints) and ranks findings by plausible
   reachability — a CVE on your request path outranks one in a dev-only tool.
 - **Plans, then patches — on your approval.** It proposes fixes in batches, applies
   only what you approve, and **verifies by re-scanning**, never by assertion.
+  (`npm audit fix` can force breaking major bumps without asking.)
 - **Zero setup.** The scanners are Python 3.8+ **stdlib only** — no `pip install`.
+
+### Where it does *not* claim an edge
+
+Honesty is part of the design. For a pure single-ecosystem npm project, `npm audit`
+draws on much of the same GitHub-sourced data, so it will catch most of the same
+issues. This tool's advantage shows up when your stack spans **multiple
+ecosystems**, when you want findings **ranked by real exposure** instead of a flat
+list, or when you want a **reviewed, verified remediation plan** rather than an
+all-at-once autofix. It is not a penetration test or a full SAST, and a version
+match is not proof a CVE is reachable in your app.
 
 ## Install
 
