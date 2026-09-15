@@ -39,24 +39,46 @@ Requires Python 3.8+ and network access to `api.osv.dev`.
 Or clone into your Claude Code plugins directory / add the repo as a marketplace.
 The skill and agent are picked up automatically once the plugin is installed.
 
-## Use
+## Usage
 
-Just ask, in any project:
+Four ways to run it, depending on how much you want Claude involved. **All of
+them audit whatever folder the session is open in** — or a path you pass
+explicitly. In a "No folder" / scratch session the skill will stop and ask for a
+project path; just give it one or open the project folder first.
+
+### 1. Just ask — the skill auto-triggers
+
+You don't have to name the tool. In a session opened on the project, plain English
+works:
 
 - "Audit this project for known vulnerabilities."
 - "Is this repo safe to ship? Check the dependencies for CVEs."
 - "Am I affected by any critical advisories? Give me a patch plan."
 
-Or run the slash command:
+The skill profiles the code, scans dependencies against OSV / GitHub Advisory DB /
+CVE, ranks findings by real exposure, and proposes a patch plan — applying fixes
+only after you approve each batch.
+
+### 2. The slash command
+
+Invoke it explicitly:
 
 ```
-/security-audit                       # audit the current project
-/security-audit . --min-severity high # only high/critical
-/security-audit . --nvd               # add NVD CVSS enrichment
+/security-audit                        # audit the current project
+/security-audit /path/to/project       # audit a specific path
+/security-audit . --min-severity high  # only high/critical
+/security-audit . --nvd                # add NVD CVSS enrichment
 ```
 
-## Run the scanners directly (no Claude required)
+### 3. Delegate to the agent
 
+Hand the whole job to the `security-auditor` subagent to run start-to-finish:
+
+- "Use the security-auditor agent on ~/my-project."
+
+### 4. Run the scanners directly — no Claude required
+
+The scanners are plain Python (stdlib only), so they run in any terminal or in CI.
 One command runs the whole chain:
 
 ```bash
